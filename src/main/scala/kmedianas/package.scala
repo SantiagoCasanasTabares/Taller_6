@@ -55,8 +55,8 @@ package object kmedianas {
 
   def actualizarSeq(clasif: Map[Punto, Seq[Punto]], medianasViejas: Seq[Punto]):Seq[Punto] = {
     val nuevasMedianas = (for {
-      i <- clasif
-    }yield calculePromedioSeq(i._1, i._2)).toSeq
+      i <- medianasViejas
+    }yield calculePromedioSeq(i, clasif(i))).toSeq
 
     nuevasMedianas
   }
