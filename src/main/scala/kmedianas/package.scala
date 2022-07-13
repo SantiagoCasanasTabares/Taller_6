@@ -35,6 +35,10 @@ package object kmedianas {
   def clasificarSeq(puntos: Seq[Punto], medianas: Seq[Punto]): Map[Punto, Seq[Punto]] = {
       medianas.groupBy((punto: Punto) => hallarPuntoMasCercano(punto, medianas))
   }
+  
+  def clasificarPar(puntos: ParSeq[Punto], medianas: ParSeq[Punto]): ParMap[Punto, ParSeq[Punto]] = {
+      medianas.groupBy((punto: Punto) => hallarPuntoMasCercano(punto, medianas)).par
+  }
 
   def calculePromedioSeq(medianaVieja: Punto, puntos: Seq[Punto]):Punto = {
     if (puntos.isEmpty)
@@ -57,6 +61,14 @@ package object kmedianas {
     val nuevasMedianas = (for {
       i <- medianasViejas
     }yield calculePromedioSeq(i, clasif(i))).toSeq
+
+    nuevasMedianas
+  }
+  
+  def actualizarPar(clasif: ParMap[Punto, ParSeq[Punto]], medianasViejas: ParSeq[Punto]):ParSeq[Punto] = {
+    val nuevasMedianas = (for {
+      i <- medianasViejas
+      }yield calculePromedioSeq(i, clasif(i))).par
 
     nuevasMedianas
   }
